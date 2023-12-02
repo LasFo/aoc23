@@ -1,36 +1,37 @@
 io.input("input.txt")
 
-local function consumeInt(s)
+function consumeInt(s)
     local ds, de, n = string.find(s, "^(%d+)")
     if not ds then return nil, nil end
-    return tonumber(n), s:sub(de+1)
+    local s = s:sub(de+1)
+    return tonumber(n), s
 end
 
-local function consumeLetters(s)
+function consumeLetters(s)
     local ds, de, n = string.find(s, "^(%a+)")
     if not ds then return nil, nil end
-    return n, s:sub(de+1)
+    local s = s:sub(de+1)
+    return n, s
 end
 
-local function trimSpace(s)
+function trimSpace(s)
     local ds, de = string.find(s, "^(%s+)")
     if not ds then return s end
-    return s:sub(de+1)
+    local s = s:sub(de+1)
+    return s
 end
 
-local res = 0
+res = 0
 for line in io.lines() do
     if not line then break end
-    line = line:sub(6)
-    line = select(2, consumeInt(line))
-    line = line:sub(3)
+    local line = line:sub(6)
+    local id, line = consumeInt(line)
+    local line = line:sub(3)
     local max = {}
     while(true) do
         if #line == 0 then break end
-        local n
         n, line = consumeInt(line)
         line = trimSpace(line)
-        local col
         col, line = consumeLetters(line)
         line = trimSpace(line:sub(2))
         if max[col] then
@@ -39,18 +40,10 @@ for line in io.lines() do
             max[col] = n
         end
     end
-    local red = 0
-    if max["red"] then
-        red = max["red"]
+    if (not max["red"] or max["red"] < 13) and
+        (not max["green"] or max["green"] < 14) and
+        (not max["blue"] or max["blue"] < 15) then
+        res = res + id
     end
-    local blue = 0
-    if max["blue"] then
-        blue = max["blue"]
-    end
-    local green = 0
-    if max["green"] then
-        green = max["green"]
-    end
-    res = res + (red*blue*green)
 end
 print(res)
