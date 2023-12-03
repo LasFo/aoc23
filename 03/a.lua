@@ -33,68 +33,36 @@ for line in io.lines() do
 end
 schema[cnt] = {}
 
-local function isGear(b)
+local function isSymbol(b)
     if not b then return false end
-    return b == 42
+    if b == 46 then return false end
+    return b < 48 or b > 57
 end
 
-local function append(a, v)
-    a[#a+1] = v
-end
-
-local function getOrInsert(a, i, j)
-    local t = a[i]
-    if not t then
-        t = {}
-        a[i] = t
-    end
-    local tt = t[j]
-    if not tt then
-        tt = {}
-        t[j] = tt
-    end
-    return tt
-end
-
-
-local gears = {}
+local res = 0
 for i=0, cnt-1 do
     local line = lines[i]
     local c = 0
     while line do
         local ds, de, n = string.find(line, "(%d+)")
         if not n then break end
+--        print(ds-1+c, de+c, line)
         line = line:sub(de+1)
         n = tonumber(n)
         ds = ds - 1
         de = de
-        if isGear(schema[i][c+ds-1]) then
-            append(getOrInsert(gears, i, c+ds-1), n)
-        end
-        if isGear(schema[i][de+c]) then
-            append(getOrInsert(gears, i, c+de), n)
-        end
+        local b = isSymbol(schema[i][c+ds-1])
+        b = b or isSymbol(schema[i][de+c])
         for idx = ds-1, de do
-            if isGear(schema[i-1][idx+c]) then
-                append(getOrInsert(gears, i-1, idx+c), n)
-            end
-            if isGear(schema[i+1][idx+c]) then
-                append(getOrInsert(gears, i+1, idx+c), n)
-            end
+            b = b or isSymbol(schema[i-1][idx+c])
+            b = b or isSymbol(schema[i+1][idx+c])
         end
-        c = c + de
+        if b then
+            res = res + n
+        else
+ --           print(i, ds+c, n)
+        end
+        c=c + de
     end
 end
-
-local res = 0
-for i, gs in pairs(gears) do
-    for j, v in pairs(gs) do
-        local prod = 1
-        for _, num in pairs(v) do
-            prod = prod * num
-        end
-        if #v == 2 then res = res + prod end
-    end
-end
-
 print(res)
