@@ -22,25 +22,29 @@
 
 io.input("input.txt")
 io.input("inputl.txt")
-local time = ""
-local dist = ""
+local times = {}
+local dists = {}
 local tl = io.read("l")
 for n in tl:gmatch("(%d+)") do
-    time = time..n
+    table.insert(times, tonumber(n))
 end
 tl = io.read("l")
 for n in tl:gmatch("(%d+)") do
-    dist = dist..n
+    table.insert(dists, tonumber(n))
 end
-time = tonumber(time)
-dist = tonumber(dist)
 
-local res = 0
+local res = 1
 local conv = {}
 conv[true] = 1
 conv[false] = 0
-for n = 1, time do
-    res = res + conv[n*(time-n)>dist]
+for i = 1, #times do
+    local t = times[i]
+    local d = dists[i]
+    local nums = 0
+    for n = 1, t do
+        nums = nums + conv[n*(t-n)>d]
+    end
+    res = res * nums
 end
 
 print(res)
