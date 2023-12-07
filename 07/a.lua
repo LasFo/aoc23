@@ -19,8 +19,8 @@
 --    local mt = {__index = function () return d end}
 --    setmetatable(t, mt)
 --end
-io.input("input.txt")
 io.input("inputl.txt")
+io.input("input.txt")
 local hands = {}
 for l in io.lines() do
     local h, r = l:match("([%a%d]+) (%d+)")
@@ -31,25 +31,22 @@ end
 local function rank(h)
     local s = {}
     local p = {}
-    local js = 0
     for i = 1, #h do
-        if string.byte('J') == h:byte(i) then js = js+1
-        elseif not s[h:byte(i)] then
+        if not s[h:byte(i)] then
             s[h:byte(i)] = 1
             table.insert(p, h:byte(i))
         else
             s[h:byte(i)] = s[h:byte(i)] + 1
         end
     end
-    local m = 0
-    local mm
+    local m, mm
     for i = 1, #p do
         local n = s[p[i]]
         if not m or m < n then mm = m m = n
         elseif not mm or mm < n then mm = n
         end
     end
-    return (m+js)*10 + (mm and mm or 0)
+    return m*10 + (mm and mm or 0)
 end
 
 local ranks = {
