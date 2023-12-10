@@ -38,11 +38,22 @@ end
 vis[start[1]*2] = {[start[2]*2]=true, [start[2]*2+1]=true, [(start[2]+1)*2]=true}
 dfs({start[1], start[2]+1}, start)
 
+--local mi = #grid*2
+--local mj = #grid[1]*2
+--for i = 1, mi do
+--    for j = 1, mj do
+--        if vis[i] and vis[i][j] then io.write("#")
+--        else io.write(".") end
+--    end
+--    io.write("\n")
+--end
+
 local res = 0
 local max = 280
 local min = 2
 local dirs = {{1,0}, {0,1}, {-1,0}, {0,-1}}
 for i = 1, #grid do
+    print(i)
     for j = 1, #grid[i] do
         local ii, jj = i*2, j*2
         if vis[ii] and vis[ii][jj] then goto endloop end
@@ -52,6 +63,7 @@ for i = 1, #grid do
         table.insert(q, {ii,jj})
         while #q>0 do
             local x, y = table.unpack(table.remove(q,1))
+        --    print(x, y)
             for _, d in pairs(dirs) do
                 local dx, dy = x + d[1], y + d[2]
                 if not vis[dx] or not vis[dx][dy] then
