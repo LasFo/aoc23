@@ -43,12 +43,12 @@ for x=1, #galaxies do
         if s[1] > l[1] then s, l = l, s end
         local skipped_rows = 0
         fun.each(function(c) if c > s[1] and c < l[1] then skipped_rows = skipped_rows +1 end end, empty_rows)
-        res = res + l[1] - s[1] + (skipped_rows*999999)
+        res = res + l[1] - s[1] + skipped_rows
 
         if s[2] > l[2] then s, l = l, s end
         local skipped_cols = 0
         fun.each(function(c) if c > s[2] and c < l[2] then skipped_cols = skipped_cols +1 end end, empty_cols)
-        res = res + l[2] - s[2] + (skipped_cols*999999)
+        res = res + l[2] - s[2] + skipped_cols
         ::endloop::
     end
 end
