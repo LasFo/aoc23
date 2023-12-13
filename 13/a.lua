@@ -9,28 +9,18 @@ local function tset(t, k, v)
   t[k[#k]] = v
 end
 
-local function equalRows(g, rl, rr, fix)
+local function equalRows(g, rl, rr)
     for i = 1, #g[rl] do
-        if g[rl][i] ~= g[rr][i] then
-            if fix then
-                fix = false
-            else
-                return false, false end
-            end
+        if g[rl][i] ~= g[rr][i] then return false end
     end
-    return fix, true
+    return true
 end
 
-local function equalCols(g, rl, rr, fix)
+local function equalCols(g, rl, rr)
     for i = 1, #g do
-        if g[i][rl] ~= g[i][rr] then
-            if fix then
-                fix = false
-            else
-                return false, false end
-            end
+        if g[i][rl] ~= g[i][rr] then return false end
     end
-    return fix, true
+    return true
 end
 
 local res = 0
@@ -50,27 +40,21 @@ while true do
     for i = 2, #pattern do
         local j = 1
         local b = true
-        local fix = true
         while j + i -1 <= #pattern and i-j >= 1  do
-            local f, e = equalRows(pattern, j + i -1,i-j, fix)
-            fix = f
-            b = b and e
+            b = b and equalRows(pattern, j + i -1,i-j)
             j = j + 1
         end
-        if b and not fix then res = res + 100*(i - 1) end
+        if b then res = res + 100*(i - 1) end
     end
 
     for i = 2, #pattern[1] do
         local j = 1
         local b = true
-        local fix = true
         while j + i-1 <= #pattern[1] and i-j >= 1  do
-            local f, e = equalCols(pattern, i+j-1,i-j, fix)
-            fix = f
-            b = b and e
+            b = b and equalCols(pattern, i+j-1,i-j)
             j = j + 1
         end
-        if b and not fix then res = res + i - 1 end
+        if b then res = res + i - 1 end
     end
 end
 print(res)
