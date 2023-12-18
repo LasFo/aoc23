@@ -101,12 +101,6 @@ while q.size > 0 do
         for _ = 1, 3 do
             x = x + dx
             y = y + dy
-            if x < 1 or x > #grid or y < 1 or y > #grid[1] then goto endloop end
-            c = c + tget(grid, {x,y})
-        end
-        for _ = 4, 10 do
-            x = x + dx
-            y = y + dy
             if x < 1 or x > #grid or y < 1 or y > #grid[1] then break end
             local opt = tget(dp, {x,y,dx,dy})
             c = c + tget(grid, {x,y})
@@ -114,7 +108,6 @@ while q.size > 0 do
                 tset(dp, {x,y,dx,dy}, c)
                 q:push({c, x, y, getDirs(d)})end
         end
-        ::endloop::
     end
 end
 
